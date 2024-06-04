@@ -17,9 +17,9 @@ import tensorflow as tf
 # os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
 
 # Load the model 
-model_path = os.path.join(settings.BASE_DIR, 'model/model_InceptionV3.h5')
+# model_path = os.path.join(settings.BASE_DIR, 'model/model_InceptionV3.h5')
 # model_path = os.path.join(settings.BASE_DIR, 'model/model_DenseNet121.h5')
-# model_path = os.path.join(settings.BASE_DIR, 'model/model_MobileNetV2.h5')
+model_path = os.path.join(settings.BASE_DIR, 'model/model_MobileNetV2.h5')
 
 model = tf.keras.models.load_model(model_path)
 
