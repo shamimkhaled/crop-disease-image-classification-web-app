@@ -1,8 +1,8 @@
 {
     "builds": [{
-        "src": "crop_disease/wsgi.py",
-        "use": "@vercel/python",
-        "config": { "maxLambdaSize": "15mb", "runtime": "python3.10" }
+        "src": "Dockerfile",
+        "use": "@vercel/docker",
+        "config": { "maxLambdaSize": "15mb", "runtime": "python3.12" }
     }],
     "routes": [
         {
