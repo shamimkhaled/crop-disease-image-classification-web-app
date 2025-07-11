@@ -1,374 +1,373 @@
 {% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crop Disease Prediction</title>
-    <!-- <link rel="stylesheet" href="css/style.css"> -->
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css2?family=Rowdies:wght@700&display=swap" rel="stylesheet">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Poetsen+One&display=swap" rel="stylesheet">
-
+    <title>Crop Disease Prediction - AI-Powered Plant Health Analysis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-
-* {
-    margin: 0px;
-    padding: 0px;
-    box-sizing: border-box;
-    font-family: "Lato", sans-serif;
-    font-weight: 400;
-    font-style: normal;
-
-
-}
-
-.carousel-inner img {
-    height: 70vh;
-}
-
-form {
-    display: flex;
-    height: 50vh;
-    justify-content: center;
-    align-items: center;
-    margin-top: 10px;
-    width: 60%;
-    text-align: center;
-    margin: auto;
-}
-
-
-.details h2 {
-    
-    position: relative;
-    top: 100px;
-    margin: auto;
-    color: rgb(18, 231, 231);
-    font-size: 3rem;
-}
-
-label:hover {
-    transform: scale(1.03);
-}
-
-.details h2 {
-    /* margin-bottom: 300px; */
-    position: relative;
-    top: 100px;
-    margin: auto;
-    color: rgb(18, 231, 231);
-    font-size: 3rem;
-
-}
-
-.gallery-h1 h1 {
-
-    background-color: rgb(1, 79, 93);
-    color: white;
-    padding: 20px;
-    border-radius: 15px;
-
-}
-
-
-
-
-
-.details h1 {
-    color: white;
-    padding: 20px;
-    border-radius: 15px;
-    background-color: rgb(1, 79, 93);
-}
-
-
-.upload {
-    display: flex;
-
-    font-size: 20px;
-    background-color: rgb(255, 252, 252);
-    border-radius: 20px;
-    outline: none;
-    width: 315px;
-    color: rgb(0, 0, 0);
-    border: 3px solid rgb(45, 47, 49);
-
-
-
-}
-
-::-webkit-file-upload-button {
-    color: white;
-    padding: 20px;
-    border: 2px solid rgb(129, 129, 129);
-    background-color: rgb(129, 129, 129);
-    border-radius: 15px;
-
-}
-
-::-webkit-file-upload-button:hover {
-    border-radius: 20px;
-    border: 2px solid rgb(177, 174, 174);
-
-
-}
-
-
-
-button {
-    display: flex;
-
-    padding: 15px 35px;
-    background-color: rgb(65, 159, 176);
-    border-radius: 15px;
-    color: rgb(249, 242, 242);
-    font-size: 1.5rem;
-    border: 4px solid rgb(31, 185, 190);
-}
-
-.carousel-caption {
-    background: rgba(24, 25, 26, 0.5);
-    border-radius: 10px;
-}
-
-
-
-.carousel-caption h3 {
-
-
-    font-family: 'Rowdies', cursive;
-    color: rgb(151, 220, 232);;
-    text-transform: uppercase;
-    margin-bottom: 10px;
-
-}
-
-.carousel-caption p {
-    padding: 7px;
-
-
-}
-
-.img-thumbnail {
-    height: 300px;
-}
-
-.Content-h5 {
-
-    padding: 15px;
-    background-color: rgb(1, 79, 93);
-    color: white;
-    border-radius: 15px;
-    margin-bottom: 25px;
-}
-
-
-@media only screen and (max-width: 325px) {
-    body {
-        font-size: x-small;
-    }
-}
+        body { font-family: 'Inter', sans-serif; }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .glow-effect {
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .hero-pattern {
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(255,255,255,0.1) 0%, transparent 50%);
+        }
+        
+        .upload-area {
+            border: 3px dashed #cbd5e1;
+            transition: all 0.3s ease;
+        }
+        
+        .upload-area:hover {
+            border-color: #667eea;
+            background-color: rgba(102, 126, 234, 0.05);
+        }
+        
+        .upload-area.dragover {
+            border-color: #667eea;
+            background-color: rgba(102, 126, 234, 0.1);
+        }
     </style>
-    
 </head>
-<body>
-    
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="container-fluid justify-content-center">
-                <a class="navbar-brand mx-auto text-center" href="/">Crop Disease Prediction</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="https://www.kaggle.com/datasets/nafishamoin/bangladeshi-crops-disease-dataset">Dataset</a>
-                        </li>
-                    </ul>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-r from-green-400 to-blue-500 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-leaf text-white text-xl"></i>
+                    </div>
+                    <span class="text-xl font-bold text-gray-800">CropCare AI</span>
                 </div>
-            </div>
-        </nav>
-        <div class="container-fluid">
-            <div id="myCarousel" class="carousel slide" data-ride="carousel">
-                <ol class="carousel-indicators">
-                    <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-                    <li data-target="#myCarousel" data-slide-to="1" class=""></li>
-                    <li data-target="#myCarousel" data-slide-to="2" class=""></li>
-                </ol>
-                <div class="carousel-inner">
-                    <div class="carousel-item active ">
-                        <img src="/static/images/img1.jpg" class="d-block w-100" alt="...">
-
-                        <div class="container">
-                            <div class="container background-img3">
-                                <div class="carousel-caption">
-
-                                    <h3>Crop
-                                         Disease Prediction AI Web App</h3>
-                                    <p>
-                                        Many veterans said that Deep Learning and AI is a threat to our world, but if we
-                                        use it properly, we can do many good things today, we will see a small example
-                                        of this in which we will be in crop farming
-                                        Find out about the disease
-                                    </p>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="carousel-item">
-                        <img src="/static/images/img2.jpg" class="d-block w-100" alt="...">
-                        <div class="container">
-                            <div class="carousel-caption">
-                                <h3> Diagnosis and treatment of Crop Diseases
-                                </h3>
-                                <p>
-                                    Many experts have said that Deep Learning and AI are a threat to our world, but if we use them correctly, we can also do many good things.
-                                    Today we will see a small example of this, in which we will learn about the diseases that occur in crops cultivation.
-                                    </p>
-
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="carousel-item">
-                        <img src="/static/images/img3.jpg" class="d-block w-100" alt="...">
-                        <div class="container">
-                            <div class="container ">
-                                <div class="carousel-caption">
-                                    <h3>
-                                        Diagnosis and treatment of Crop Diseases </h3>
-                                    <p>
-                                    For the past few years, deep learning and artificial intelligence have been the most talked-about topics.
-                                     Many experts say that these are a threat to our world, but if we use them correctly, we can do many good things today. 
-                                    One example of this is that we learn about crop diseases and find remedies for them.
-                                    </p>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="/" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">Home</a>
+                    <a href="https://www.kaggle.com/datasets/nafishamoin/bangladeshi-crops-disease-dataset" 
+                       class="text-gray-700 hover:text-blue-600 font-medium transition-colors" target="_blank">Dataset</a>
+                    <button class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-2 rounded-full hover:from-blue-600 hover:to-purple-700 transition-all duration-300 glow-effect">
+                        Get Started
+                    </button>
                 </div>
-                <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Previous</span>
-                </a>
-                <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Next</span>
-                </a>
+                
+                <div class="md:hidden">
+                    <button class="text-gray-700 hover:text-blue-600">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
             </div>
         </div>
-    </header>
+    </nav>
 
-    
-     <section>
-
-        <div class="container-fluid details">
-            <h1 class="text-center mt-5 ">Predict Crop Disease & Get Cure</h1>
-            <h4 class="text-center mt-5">Upload Image and Predict Leaf Diseases in Corn, Potato, Rice, and Wheat</h4>
-           
-             <form method="post" enctype="multipart/form-data"  onsubmit="showloading()">
-                {% csrf_token %}
-                <input type="file" name="image" accept="image/*" required>
-                <button type="submit">Predict</button>
-            </form>
+    <!-- Hero Section -->
+    <section class="gradient-bg hero-pattern text-white py-20 lg:py-32">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="text-center lg:text-left">
+                    <h1 class="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
+                        AI-Powered <span class="text-yellow-300">Crop Disease</span> Detection
+                    </h1>
+                    <p class="text-xl lg:text-2xl mb-8 text-blue-100 leading-relaxed">
+                        Revolutionize your farming with cutting-edge deep learning technology. 
+                        Instantly identify diseases in corn, potato, rice, and wheat crops.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                        <button onclick="document.getElementById('upload-section').scrollIntoView({behavior: 'smooth'})" 
+                                class="bg-white text-blue-600 px-8 py-4 rounded-full font-semibold hover:bg-blue-50 transition-all duration-300 shadow-lg">
+                            <i class="fas fa-upload mr-2"></i>
+                            Start Analysis
+                        </button>
+                        <button class="border-2 border-white text-white px-8 py-4 rounded-full font-semibold hover:bg-white hover:text-blue-600 transition-all duration-300">
+                            <i class="fas fa-play mr-2"></i>
+                            Learn More
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="relative">
+                    <div class="animate-float">
+                        <img src="/static/images/img1.jpg" alt="Crop Analysis" 
+                             class="w-full h-96 object-cover rounded-2xl shadow-2xl">
+                    </div>
+                    <div class="absolute -bottom-6 -left-6 w-24 h-24 bg-yellow-400 rounded-full opacity-20"></div>
+                    <div class="absolute -top-6 -right-6 w-32 h-32 bg-green-400 rounded-full opacity-20"></div>
+                </div>
+            </div>
         </div>
     </section>
 
-
-
-
-    <section style="margin-bottom: 100px;">
-
-        <div class="container gallery-h1">
-
-            <h1 class="text-center mt-4 mb-4">Image Gallery</h1>
-
-
-
-            <hr class="mt-2 mb-5">
-
-            <div class="row text-center text-lg-left">
-
-                <div class="col-lg-4 col-md-4 col-6 col-12">
-                    <a href="#" class="d-block mb-4 h-100">
-                        <img class="img-fluid img-thumbnail" src="/static/images/Gallery1.jpg" alt="">
-                    </a>
-                </div>
-                <div class="col-lg-4 col-md-4 col-6 col-12">
-                    <a href="#" class="d-block mb-4 h-100">
-                        <img class="img-fluid img-thumbnail" src="/static/images/Gallery2.jpg" alt="">
-                    </a>
-                </div>
-
-                <div class="col-lg-4 col-md-4 col-6 col-12">
-                    <a href="#" class="d-block mb-4 h-100">
-                        <img class="img-fluid img-thumbnail" src="/static/images/Gallery3.jpg" alt="">
-                    </a>
-                </div>
-                <div class="col-lg-4 col-md-4 col-6 col-12">
-                    <a href="#" class="d-block mb-4 h-100">
-                        <img class="img-fluid img-thumbnail" src="/static/images/Gallery4.jpg" alt="">
-                    </a>
-                </div>
-                <div class="col-lg-4 col-md-4 col-6 col-12">
-                    <a href="#" class="d-block mb-4 h-100">
-                        <img class="img-fluid img-thumbnail" src="/static/images/Gallery5.jpeg" alt="">
-                    </a>
-                </div>
-                <div class="col-lg-4 col-md-4 col-6 col-12">
-                    <a href="#" class="d-block mb-4 h-100">
-                        <img class="img-fluid img-thumbnail" src="/static/images/Gallery6.jpg" alt="">
-                    </a>
-                </div>
-
-
-
-
+    <!-- Features Section -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl lg:text-5xl font-bold text-gray-800 mb-4">
+                    Why Choose <span class="text-blue-600">CropCare AI</span>?
+                </h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Advanced machine learning models trained on thousands of crop images to provide accurate, real-time disease detection.
+                </p>
             </div>
-
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="text-center p-8 card-hover bg-gray-50 rounded-2xl">
+                    <div class="w-16 h-16 bg-gradient-to-r from-green-400 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-brain text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">AI-Powered Analysis</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        Utilizing state-of-the-art deep learning models including InceptionV3 and DenseNet121 for precise disease identification.
+                    </p>
+                </div>
+                
+                <div class="text-center p-8 card-hover bg-gray-50 rounded-2xl">
+                    <div class="w-16 h-16 bg-gradient-to-r from-purple-400 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-clock text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Instant Results</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        Get immediate disease classification with confidence scores and recommended treatment solutions.
+                    </p>
+                </div>
+                
+                <div class="text-center p-8 card-hover bg-gray-50 rounded-2xl">
+                    <div class="w-16 h-16 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-seedling text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Multiple Crops</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        Comprehensive coverage for corn, potato, rice, and wheat with specific disease patterns and treatments.
+                    </p>
+                </div>
+            </div>
         </div>
-
     </section>
 
-
-    <section>
-        <div class="container Content-h5">
-
-            <h4 style="font-size: 1rem;" class="text-center my-3 contents">
-                Crop Disease Image Classifiction and Prediction with Deep Learning</h4>
-
+    <!-- Upload Section -->
+    <section id="upload-section" class="py-20 bg-gradient-to-br from-blue-50 to-purple-50">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl lg:text-5xl font-bold text-gray-800 mb-4">
+                    Upload & <span class="text-blue-600">Analyze</span>
+                </h2>
+                <p class="text-xl text-gray-600">
+                    Upload an image of your crop leaf to get instant disease detection and treatment recommendations
+                </p>
+            </div>
+            
+            <div class="bg-white rounded-3xl shadow-2xl p-8 lg:p-12">
+                <form method="post" enctype="multipart/form-data" class="space-y-8">
+                    {% csrf_token %}
+                    
+                    <div class="upload-area rounded-2xl p-12 text-center">
+                        <div class="mb-6">
+                            <i class="fas fa-cloud-upload-alt text-6xl text-gray-400 mb-4"></i>
+                            <h3 class="text-2xl font-semibold text-gray-700 mb-2">Drop your image here</h3>
+                            <p class="text-gray-500">or click to browse</p>
+                        </div>
+                        
+                        <input type="file" name="image" accept="image/*" required 
+                               class="hidden" id="fileInput">
+                        <label for="fileInput" 
+                               class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-8 py-4 rounded-full font-semibold hover:from-blue-600 hover:to-purple-700 transition-all duration-300 cursor-pointer inline-block glow-effect">
+                            <i class="fas fa-folder-open mr-2"></i>
+                            Choose File
+                        </label>
+                        
+                        <div id="preview" class="mt-6 hidden">
+                            <img id="previewImage" class="max-w-xs mx-auto rounded-lg shadow-lg">
+                            <p id="fileName" class="mt-2 text-sm text-gray-600"></p>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <button type="submit" 
+                                class="bg-gradient-to-r from-green-500 to-blue-600 text-white px-12 py-4 rounded-full text-xl font-semibold hover:from-green-600 hover:to-blue-700 transition-all duration-300 shadow-lg glow-effect">
+                            <i class="fas fa-search mr-2"></i>
+                            Analyze Crop
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </section>
 
+    <!-- Image Gallery Section -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl lg:text-5xl font-bold text-gray-800 mb-4">
+                    Sample <span class="text-blue-600">Gallery</span>
+                </h2>
+                <p class="text-xl text-gray-600">
+                    Examples of crop diseases our AI can detect and analyze
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="card-hover rounded-2xl overflow-hidden shadow-lg">
+                    <img src="/static/images/Gallery1.jpg" alt="Crop Sample 1" 
+                         class="w-full h-64 object-cover">
+                    <div class="p-6 bg-white">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Corn Leaf Disease</h3>
+                        <p class="text-gray-600">Common rust detection example</p>
+                    </div>
+                </div>
+                
+                <div class="card-hover rounded-2xl overflow-hidden shadow-lg">
+                    <img src="/static/images/Gallery2.jpg" alt="Crop Sample 2" 
+                         class="w-full h-64 object-cover">
+                    <div class="p-6 bg-white">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Potato Blight</h3>
+                        <p class="text-gray-600">Early blight identification</p>
+                    </div>
+                </div>
+                
+                <div class="card-hover rounded-2xl overflow-hidden shadow-lg">
+                    <img src="/static/images/Gallery3.jpg" alt="Crop Sample 3" 
+                         class="w-full h-64 object-cover">
+                    <div class="p-6 bg-white">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Rice Disease</h3>
+                        <p class="text-gray-600">Leaf blast analysis</p>
+                    </div>
+                </div>
+                
+                <div class="card-hover rounded-2xl overflow-hidden shadow-lg">
+                    <img src="/static/images/Gallery4.jpg" alt="Crop Sample 4" 
+                         class="w-full h-64 object-cover">
+                    <div class="p-6 bg-white">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Wheat Rust</h3>
+                        <p class="text-gray-600">Yellow rust detection</p>
+                    </div>
+                </div>
+                
+                <div class="card-hover rounded-2xl overflow-hidden shadow-lg">
+                    <img src="/static/images/Gallery5.jpeg" alt="Crop Sample 5" 
+                         class="w-full h-64 object-cover">
+                    <div class="p-6 bg-white">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Healthy Crops</h3>
+                        <p class="text-gray-600">Normal leaf patterns</p>
+                    </div>
+                </div>
+                
+                <div class="card-hover rounded-2xl overflow-hidden shadow-lg">
+                    <img src="/static/images/Gallery6.jpg" alt="Crop Sample 6" 
+                         class="w-full h-64 object-cover">
+                    <div class="p-6 bg-white">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Disease Analysis</h3>
+                        <p class="text-gray-600">Advanced pattern recognition</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <div class="flex items-center justify-center space-x-3 mb-6">
+                    <div class="w-10 h-10 bg-gradient-to-r from-green-400 to-blue-500 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-leaf text-white text-xl"></i>
+                    </div>
+                    <span class="text-2xl font-bold">CropCare AI</span>
+                </div>
+                <p class="text-gray-400 mb-6 max-w-2xl mx-auto">
+                    Empowering farmers worldwide with AI-driven crop disease detection and treatment solutions.
+                </p>
+                <div class="border-t border-gray-800 pt-6">
+                    <p class="text-gray-500">
+                        © 2025 CropCare AI. Powered by Deep Learning & Computer Vision.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
 
+    <!-- JavaScript for enhanced interactions -->
+    <script>
+        // File input handling
+        const fileInput = document.getElementById('fileInput');
+        const preview = document.getElementById('preview');
+        const previewImage = document.getElementById('previewImage');
+        const fileName = document.getElementById('fileName');
+        const uploadArea = document.querySelector('.upload-area');
 
+        fileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImage.src = e.target.result;
+                    fileName.textContent = file.name;
+                    preview.classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
 
+        // Drag and drop functionality
+        uploadArea.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-    crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
-    integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
-    crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
-    integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
-    crossorigin="anonymous"></script>
+        uploadArea.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', function(e) {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                fileInput.files = files;
+                fileInput.dispatchEvent(new Event('change'));
+            }
+        });
+
+        // Smooth scrolling for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
 </body>
-
-
 </html>
+

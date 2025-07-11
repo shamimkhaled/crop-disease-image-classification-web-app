@@ -25,6 +25,8 @@ local_settings.py
 
 # Django static and media files
 staticfiles/
+media/
+static/
 
 # Coverage reports
 htmlcov/
