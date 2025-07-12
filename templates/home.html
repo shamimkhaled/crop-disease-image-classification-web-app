@@ -1,373 +1,925 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crop Disease Prediction - AI-Powered Plant Health Analysis</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+{% block title %}CropCare AI - AI-Powered Crop Disease Detection{% endblock %}
+
+{% block description %}Revolutionary AI-powered crop disease detection using deep learning. Instantly identify diseases in corn, potato, rice, and wheat crops with high accuracy.{% endblock %}
+
+{% block extra_css %}
+.upload-zone {
+    border: 2px dashed #cbd5e1;
+    transition: all 0.3s ease;
+}
+
+.upload-zone:hover,
+.upload-zone.dragover {
+    border-color: #2563eb;
+    background-color: rgba(37, 99, 235, 0.05);
+    transform: scale(1.02);
+}
+
+.ai-crop-bg {
+    background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6));
+}
+
+.prediction-flow {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+}
+
+.classification-card:hover .disease-indicator {
+    transform: scale(1.1);
+}
+
+.crop-icon {
+    transition: all 0.3s ease;
+}
+
+.classification-card:hover .crop-icon {
+    transform: rotate(5deg) scale(1.1);
+}
+
+.step-number {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: white;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+}
+
+.step-connector {
+    width: 2px;
+    height: 60px;
+    background: linear-gradient(to bottom, #2563eb, #cbd5e1);
+    margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+    .step-connector {
+        width: 60px;
+        height: 2px;
+        background: linear-gradient(to right, #2563eb, #cbd5e1);
+    }
+}
+{% endblock %}
+
+{% block nav_links %}
+<a href="#features" class="text-gray-600 hover:text-primary transition-colors font-medium">Features</a>
+<a href="#classification" class="text-gray-600 hover:text-primary transition-colors font-medium">Classification</a>
+<a href="#upload" class="text-gray-600 hover:text-primary transition-colors font-medium">Analyze</a>
+<a href="https://www.kaggle.com/datasets/nafishamoin/bangladeshi-crops-disease-dataset" 
+   class="text-gray-600 hover:text-primary transition-colors font-medium" target="_blank">Dataset</a>
+{% endblock %}
+
+{% block nav_cta %}
+<button onclick="document.getElementById('upload').scrollIntoView({behavior: 'smooth'})" 
+        class="gradient-primary text-white px-6 py-2 rounded-full text-sm font-medium hover:shadow-lg transition-all duration-300">
+    Get Started
+</button>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="gradient-hero text-white pt-24 pb-20 lg:pb-32 relative overflow-hidden">
+    <!-- Background Pattern -->
+    <div class="absolute inset-0 opacity-10">
+        <div class="absolute inset-0" style="background-image: radial-gradient(circle at 20% 30%, rgba(37, 99, 235, 0.3) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(16, 185, 129, 0.3) 0%, transparent 50%);"></div>
+    </div>
     
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-        
-        .gradient-bg {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-        
-        .card-hover {
-            transition: all 0.3s ease;
-        }
-        
-        .card-hover:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-        }
-        
-        .glow-effect {
-            box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
-        }
-        
-        .animate-float {
-            animation: float 6s ease-in-out infinite;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-        }
-        
-        .hero-pattern {
-            background-image: 
-                radial-gradient(circle at 25% 25%, rgba(255,255,255,0.1) 0%, transparent 50%),
-                radial-gradient(circle at 75% 75%, rgba(255,255,255,0.1) 0%, transparent 50%);
-        }
-        
-        .upload-area {
-            border: 3px dashed #cbd5e1;
-            transition: all 0.3s ease;
-        }
-        
-        .upload-area:hover {
-            border-color: #667eea;
-            background-color: rgba(102, 126, 234, 0.05);
-        }
-        
-        .upload-area.dragover {
-            border-color: #667eea;
-            background-color: rgba(102, 126, 234, 0.1);
-        }
-    </style>
-</head>
-<body class="bg-gray-50">
-    <!-- Navigation -->
-    <nav class="bg-white shadow-lg sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 bg-gradient-to-r from-green-400 to-blue-500 rounded-lg flex items-center justify-center">
-                        <i class="fas fa-leaf text-white text-xl"></i>
-                    </div>
-                    <span class="text-xl font-bold text-gray-800">CropCare AI</span>
-                </div>
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 relative">
+        <div class="grid lg:grid-cols-2 gap-16 items-center">
+            <div class="text-center lg:text-left">
+                <h1 class="text-4xl lg:text-6xl font-bold mb-8 leading-tight">
+                    <span class="text-white">AI-Powered</span><br>
+                    <span class="text-gradient">Crop Disease</span><br>
+                    <span class="text-white">Detection</span>
+                </h1>
                 
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="/" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">Home</a>
-                    <a href="https://www.kaggle.com/datasets/nafishamoin/bangladeshi-crops-disease-dataset" 
-                       class="text-gray-700 hover:text-blue-600 font-medium transition-colors" target="_blank">Dataset</a>
-                    <button class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-2 rounded-full hover:from-blue-600 hover:to-purple-700 transition-all duration-300 glow-effect">
-                        Get Started
+                <p class="text-xl text-gray-300 mb-10 leading-relaxed max-w-xl">
+                    Revolutionary deep learning technology for instant crop disease detection. 
+                    Protect your harvest with precision AI analysis across 
+                    <span class="text-secondary font-semibold">4 crop types</span> and 
+                    <span class="text-tertiary font-semibold">14 disease classes</span>.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                    <button onclick="document.getElementById('upload').scrollIntoView({behavior: 'smooth'})" 
+                            class="gradient-secondary text-white px-8 py-4 rounded-full font-semibold hover:shadow-xl transition-all duration-300 inline-flex items-center justify-center">
+                        <i class="fas fa-camera mr-3"></i>
+                        Start Detection
                     </button>
-                </div>
-                
-                <div class="md:hidden">
-                    <button class="text-gray-700 hover:text-blue-600">
-                        <i class="fas fa-bars text-xl"></i>
+                    <button onclick="document.getElementById('classification').scrollIntoView({behavior: 'smooth'})" 
+                            class="border-2 border-white/30 text-white px-8 py-4 rounded-full font-semibold hover:bg-white hover:text-dark transition-all duration-300 inline-flex items-center justify-center">
+                        <i class="fas fa-list-ul mr-3"></i>
+                        View Classifications
                     </button>
                 </div>
             </div>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section class="gradient-bg hero-pattern text-white py-20 lg:py-32">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid lg:grid-cols-2 gap-12 items-center">
-                <div class="text-center lg:text-left">
-                    <h1 class="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
-                        AI-Powered <span class="text-yellow-300">Crop Disease</span> Detection
-                    </h1>
-                    <p class="text-xl lg:text-2xl mb-8 text-blue-100 leading-relaxed">
-                        Revolutionize your farming with cutting-edge deep learning technology. 
-                        Instantly identify diseases in corn, potato, rice, and wheat crops.
-                    </p>
-                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                        <button onclick="document.getElementById('upload-section').scrollIntoView({behavior: 'smooth'})" 
-                                class="bg-white text-blue-600 px-8 py-4 rounded-full font-semibold hover:bg-blue-50 transition-all duration-300 shadow-lg">
-                            <i class="fas fa-upload mr-2"></i>
-                            Start Analysis
-                        </button>
-                        <button class="border-2 border-white text-white px-8 py-4 rounded-full font-semibold hover:bg-white hover:text-blue-600 transition-all duration-300">
-                            <i class="fas fa-play mr-2"></i>
-                            Learn More
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="relative">
-                    <div class="animate-float">
-                        <img src="/static/images/img1.jpg" alt="Crop Analysis" 
-                             class="w-full h-96 object-cover rounded-2xl shadow-2xl">
-                    </div>
-                    <div class="absolute -bottom-6 -left-6 w-24 h-24 bg-yellow-400 rounded-full opacity-20"></div>
-                    <div class="absolute -top-6 -right-6 w-32 h-32 bg-green-400 rounded-full opacity-20"></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Features Section -->
-    <section class="py-20 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl lg:text-5xl font-bold text-gray-800 mb-4">
-                    Why Choose <span class="text-blue-600">CropCare AI</span>?
-                </h2>
-                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-                    Advanced machine learning models trained on thousands of crop images to provide accurate, real-time disease detection.
-                </p>
-            </div>
             
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="text-center p-8 card-hover bg-gray-50 rounded-2xl">
-                    <div class="w-16 h-16 bg-gradient-to-r from-green-400 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <i class="fas fa-brain text-white text-2xl"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-800 mb-4">AI-Powered Analysis</h3>
-                    <p class="text-gray-600 leading-relaxed">
-                        Utilizing state-of-the-art deep learning models including InceptionV3 and DenseNet121 for precise disease identification.
-                    </p>
-                </div>
-                
-                <div class="text-center p-8 card-hover bg-gray-50 rounded-2xl">
-                    <div class="w-16 h-16 bg-gradient-to-r from-purple-400 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <i class="fas fa-clock text-white text-2xl"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Instant Results</h3>
-                    <p class="text-gray-600 leading-relaxed">
-                        Get immediate disease classification with confidence scores and recommended treatment solutions.
-                    </p>
-                </div>
-                
-                <div class="text-center p-8 card-hover bg-gray-50 rounded-2xl">
-                    <div class="w-16 h-16 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <i class="fas fa-seedling text-white text-2xl"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Multiple Crops</h3>
-                    <p class="text-gray-600 leading-relaxed">
-                        Comprehensive coverage for corn, potato, rice, and wheat with specific disease patterns and treatments.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Upload Section -->
-    <section id="upload-section" class="py-20 bg-gradient-to-br from-blue-50 to-purple-50">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl lg:text-5xl font-bold text-gray-800 mb-4">
-                    Upload & <span class="text-blue-600">Analyze</span>
-                </h2>
-                <p class="text-xl text-gray-600">
-                    Upload an image of your crop leaf to get instant disease detection and treatment recommendations
-                </p>
-            </div>
-            
-            <div class="bg-white rounded-3xl shadow-2xl p-8 lg:p-12">
-                <form method="post" enctype="multipart/form-data" class="space-y-8">
-                    {% csrf_token %}
-                    
-                    <div class="upload-area rounded-2xl p-12 text-center">
-                        <div class="mb-6">
-                            <i class="fas fa-cloud-upload-alt text-6xl text-gray-400 mb-4"></i>
-                            <h3 class="text-2xl font-semibold text-gray-700 mb-2">Drop your image here</h3>
-                            <p class="text-gray-500">or click to browse</p>
-                        </div>
-                        
-                        <input type="file" name="image" accept="image/*" required 
-                               class="hidden" id="fileInput">
-                        <label for="fileInput" 
-                               class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-8 py-4 rounded-full font-semibold hover:from-blue-600 hover:to-purple-700 transition-all duration-300 cursor-pointer inline-block glow-effect">
-                            <i class="fas fa-folder-open mr-2"></i>
-                            Choose File
-                        </label>
-                        
-                        <div id="preview" class="mt-6 hidden">
-                            <img id="previewImage" class="max-w-xs mx-auto rounded-lg shadow-lg">
-                            <p id="fileName" class="mt-2 text-sm text-gray-600"></p>
+            <div class="relative">
+                <div class="animate-float">
+                    <!-- AI Generated Crop Image -->
+                    <div class="w-full h-96 rounded-3xl overflow-hidden shadow-2xl relative">
+                        <div class="absolute inset-0 ai-crop-bg"></div>
+                        <img src="/static/images/img1.jpg?w=600&h=400&fit=crop&crop=center" 
+                             alt="AI Crop Analysis" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="glass-effect rounded-2xl p-6 text-center">
+                                <i class="fas fa-brain text-4xl text-secondary mb-3"></i>
+                                <p class="text-white font-semibold">AI Vision Active</p>
+                                <p class="text-blue-200 text-sm mt-1">31K+ Images Trained</p>
+                            </div>
                         </div>
                     </div>
-                    
-                    <div class="text-center">
-                        <button type="submit" 
-                                class="bg-gradient-to-r from-green-500 to-blue-600 text-white px-12 py-4 rounded-full text-xl font-semibold hover:from-green-600 hover:to-blue-700 transition-all duration-300 shadow-lg glow-effect">
-                            <i class="fas fa-search mr-2"></i>
-                            Analyze Crop
-                        </button>
-                    </div>
-                </form>
+                </div>
+                
+                <!-- Floating Elements -->
+                <div class="absolute -top-6 -right-6 w-20 h-20 gradient-secondary rounded-full opacity-20 animate-pulse"></div>
+                <div class="absolute -bottom-6 -left-6 w-16 h-16 bg-tertiary rounded-full opacity-30 animate-pulse delay-1000"></div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- Image Gallery Section -->
-    <section class="py-20 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl lg:text-5xl font-bold text-gray-800 mb-4">
-                    Sample <span class="text-blue-600">Gallery</span>
-                </h2>
-                <p class="text-xl text-gray-600">
-                    Examples of crop diseases our AI can detect and analyze
+<!-- Stats Section -->
+<section class="py-16 bg-white">
+    <div class="max-w-6xl mx-auto px-6 lg:px-8">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            <div class="p-6">
+                <div class="text-3xl lg:text-4xl font-bold text-primary mb-2">31,053</div>
+                <div class="text-gray-600 text-sm lg:text-base">Training Images</div>
+            </div>
+            <div class="p-6">
+                <div class="text-3xl lg:text-4xl font-bold text-secondary mb-2">14</div>
+                <div class="text-gray-600 text-sm lg:text-base">Disease Classes</div>
+            </div>
+            <div class="p-6">
+                <div class="text-3xl lg:text-4xl font-bold text-tertiary mb-2">4</div>
+                <div class="text-gray-600 text-sm lg:text-base">Crop Types</div>
+            </div>
+            <div class="p-6">
+                <div class="text-3xl lg:text-4xl font-bold text-accent mb-2">95%</div>
+                <div class="text-gray-600 text-sm lg:text-base">Accuracy Rate</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section id="features" class="py-20 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl lg:text-5xl font-bold text-dark mb-6">
+                Why Choose <span class="text-gradient">CropCare AI</span>
+            </h2>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                Advanced neural networks trained on extensive datasets for precise agricultural intelligence
+            </p>
+        </div>
+        
+        <div class="grid md:grid-cols-3 gap-8">
+            <div class="bg-white p-8 rounded-3xl hover-lift border border-gray-100">
+                <div class="w-16 h-16 gradient-primary rounded-2xl flex items-center justify-center mb-6">
+                    <i class="fas fa-brain text-white text-2xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-dark mb-4">Deep Learning Models</h3>
+                <p class="text-gray-600 leading-relaxed mb-4">
+                    State-of-the-art architectures including InceptionV3, DenseNet121, and MobileNetV2 for maximum accuracy
                 </p>
+                <div class="flex flex-wrap gap-2">
+                    <span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium">InceptionV3</span>
+                    <span class="px-3 py-1 bg-accent/10 text-accent rounded-full text-sm font-medium">DenseNet121</span>
+                    <span class="px-3 py-1 bg-secondary/10 text-secondary rounded-full text-sm font-medium">MobileNetV2</span>
+                </div>
             </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="card-hover rounded-2xl overflow-hidden shadow-lg">
-                    <img src="/static/images/Gallery1.jpg" alt="Crop Sample 1" 
-                         class="w-full h-64 object-cover">
-                    <div class="p-6 bg-white">
-                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Corn Leaf Disease</h3>
-                        <p class="text-gray-600">Common rust detection example</p>
-                    </div>
+            <div class="bg-white p-8 rounded-3xl hover-lift border border-gray-100">
+                <div class="w-16 h-16 gradient-secondary rounded-2xl flex items-center justify-center mb-6">
+                    <i class="fas fa-zap text-white text-2xl"></i>
                 </div>
-                
-                <div class="card-hover rounded-2xl overflow-hidden shadow-lg">
-                    <img src="/static/images/Gallery2.jpg" alt="Crop Sample 2" 
-                         class="w-full h-64 object-cover">
-                    <div class="p-6 bg-white">
-                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Potato Blight</h3>
-                        <p class="text-gray-600">Early blight identification</p>
-                    </div>
+                <h3 class="text-2xl font-bold text-dark mb-4">Instant Analysis</h3>
+                <p class="text-gray-600 leading-relaxed mb-4">
+                    Real-time disease detection with confidence scores and actionable treatment recommendations
+                </p>
+                <div class="flex items-center text-secondary">
+                    <i class="fas fa-clock mr-2"></i>
+                    <span class="text-sm font-medium">Results in seconds</span>
                 </div>
-                
-                <div class="card-hover rounded-2xl overflow-hidden shadow-lg">
-                    <img src="/static/images/Gallery3.jpg" alt="Crop Sample 3" 
-                         class="w-full h-64 object-cover">
-                    <div class="p-6 bg-white">
-                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Rice Disease</h3>
-                        <p class="text-gray-600">Leaf blast analysis</p>
-                    </div>
+            </div>
+            
+            <div class="bg-white p-8 rounded-3xl hover-lift border border-gray-100">
+                <div class="w-16 h-16 bg-gradient-to-r from-tertiary to-accent rounded-2xl flex items-center justify-center mb-6">
+                    <i class="fas fa-seedling text-white text-2xl"></i>
                 </div>
-                
-                <div class="card-hover rounded-2xl overflow-hidden shadow-lg">
-                    <img src="/static/images/Gallery4.jpg" alt="Crop Sample 4" 
-                         class="w-full h-64 object-cover">
-                    <div class="p-6 bg-white">
-                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Wheat Rust</h3>
-                        <p class="text-gray-600">Yellow rust detection</p>
-                    </div>
-                </div>
-                
-                <div class="card-hover rounded-2xl overflow-hidden shadow-lg">
-                    <img src="/static/images/Gallery5.jpeg" alt="Crop Sample 5" 
-                         class="w-full h-64 object-cover">
-                    <div class="p-6 bg-white">
-                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Healthy Crops</h3>
-                        <p class="text-gray-600">Normal leaf patterns</p>
-                    </div>
-                </div>
-                
-                <div class="card-hover rounded-2xl overflow-hidden shadow-lg">
-                    <img src="/static/images/Gallery6.jpg" alt="Crop Sample 6" 
-                         class="w-full h-64 object-cover">
-                    <div class="p-6 bg-white">
-                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Disease Analysis</h3>
-                        <p class="text-gray-600">Advanced pattern recognition</p>
-                    </div>
+                <h3 class="text-2xl font-bold text-dark mb-4">Multi-Crop Support</h3>
+                <p class="text-gray-600 leading-relaxed mb-4">
+                    Comprehensive coverage for corn, potato, rice, and wheat with specialized disease patterns
+                </p>
+                <div class="flex items-center text-tertiary">
+                    <i class="fas fa-leaf mr-2"></i>
+                    <span class="text-sm font-medium">4 major crop types</span>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<!-- Prediction Flow Section -->
+<section class="py-20 prediction-flow">
+    <div class="max-w-6xl mx-auto px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl lg:text-5xl font-bold text-dark mb-6">
+                How It <span class="text-gradient">Works</span>
+            </h2>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                Simple 3-step process to get instant crop disease analysis and treatment recommendations
+            </p>
+        </div>
+        
+        <div class="grid md:grid-cols-3 gap-8 md:gap-4">
+            <!-- Step 1 -->
             <div class="text-center">
-                <div class="flex items-center justify-center space-x-3 mb-6">
-                    <div class="w-10 h-10 bg-gradient-to-r from-green-400 to-blue-500 rounded-lg flex items-center justify-center">
-                        <i class="fas fa-leaf text-white text-xl"></i>
+                <div class="step-number mx-auto mb-6">1</div>
+                <div class="bg-white rounded-2xl p-8 shadow-lg hover-lift border border-gray-100">
+                    <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-camera text-primary text-2xl"></i>
                     </div>
-                    <span class="text-2xl font-bold">CropCare AI</span>
+                    <h3 class="text-xl font-bold text-dark mb-4">Upload Image</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        Take a clear photo of the affected crop leaf or upload from your device. 
+                        Our AI works best with well-lit, close-up images.
+                    </p>
                 </div>
-                <p class="text-gray-400 mb-6 max-w-2xl mx-auto">
-                    Empowering farmers worldwide with AI-driven crop disease detection and treatment solutions.
-                </p>
-                <div class="border-t border-gray-800 pt-6">
-                    <p class="text-gray-500">
-                        © 2025 CropCare AI. Powered by Deep Learning & Computer Vision.
+                <div class="step-connector mt-8 hidden md:block"></div>
+            </div>
+            
+            <!-- Step 2 -->
+            <div class="text-center">
+                <div class="step-number mx-auto mb-6">2</div>
+                <div class="bg-white rounded-2xl p-8 shadow-lg hover-lift border border-gray-100">
+                    <div class="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-brain text-secondary text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-dark mb-4">AI Analysis</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        Our deep learning models analyze the image using computer vision 
+                        to identify diseases with high accuracy and confidence scores.
+                    </p>
+                </div>
+                <div class="step-connector mt-8 hidden md:block"></div>
+            </div>
+            
+            <!-- Step 3 -->
+            <div class="text-center">
+                <div class="step-number mx-auto mb-6">3</div>
+                <div class="bg-white rounded-2xl p-8 shadow-lg hover-lift border border-gray-100">
+                    <div class="w-16 h-16 bg-yellow-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-prescription-bottle-alt text-tertiary text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-dark mb-4">Get Treatment</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        Receive detailed results with disease identification, treatment solutions, 
+                        and recommended products for effective crop management.
                     </p>
                 </div>
             </div>
         </div>
-    </footer>
+    </div>
+</section>
 
-    <!-- JavaScript for enhanced interactions -->
-    <script>
-        // File input handling
-        const fileInput = document.getElementById('fileInput');
-        const preview = document.getElementById('preview');
-        const previewImage = document.getElementById('previewImage');
-        const fileName = document.getElementById('fileName');
-        const uploadArea = document.querySelector('.upload-area');
-
-        fileInput.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    previewImage.src = e.target.result;
-                    fileName.textContent = file.name;
-                    preview.classList.remove('hidden');
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-
-        // Drag and drop functionality
-        uploadArea.addEventListener('dragover', function(e) {
-            e.preventDefault();
-            uploadArea.classList.add('dragover');
-        });
-
-        uploadArea.addEventListener('dragleave', function(e) {
-            e.preventDefault();
-            uploadArea.classList.remove('dragover');
-        });
-
-        uploadArea.addEventListener('drop', function(e) {
-            e.preventDefault();
-            uploadArea.classList.remove('dragover');
+<!-- Disease Classification Section -->
+<section id="classification" class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl lg:text-5xl font-bold text-dark mb-6">
+                Disease <span class="text-gradient">Classification</span>
+            </h2>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                Comprehensive AI-powered detection across 14 disease classes and 4 major crop types
+            </p>
+        </div>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-8">
+            <!-- Corn Classification -->
+            <div class="classification-card bg-gradient-to-br from-yellow-50 to-orange-50 rounded-3xl p-8 border border-yellow-100 hover-lift">
+                <div class="flex items-center mb-6">
+                    <div class="w-16 h-16 bg-yellow-100 rounded-2xl flex items-center justify-center mr-4 crop-icon">
+                        <i class="fas fa-corn text-yellow-600 text-2xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-dark">Corn</h3>
+                        <p class="text-gray-600 text-sm">Zea mays</p>
+                    </div>
+                </div>
+                
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between p-3 bg-white rounded-xl border border-yellow-200">
+                        <div class="flex items-center">
+                            <div class="disease-indicator w-3 h-3 bg-red-500 rounded-full mr-3"></div>
+                            <span class="text-gray-700 font-medium">Common Rust</span>
+                        </div>
+                        <i class="fas fa-info-circle text-gray-400 text-sm"></i>
+                    </div>
+                    
+                    <div class="flex items-center justify-between p-3 bg-white rounded-xl border border-yellow-200">
+                        <div class="flex items-center">
+                            <div class="disease-indicator w-3 h-3 bg-red-500 rounded-full mr-3"></div>
+                            <span class="text-gray-700 font-medium">Gray Leaf Spot</span>
+                        </div>
+                        <i class="fas fa-info-circle text-gray-400 text-sm"></i>
+                    </div>
+                    
+                    <div class="flex items-center justify-between p-3 bg-white rounded-xl border border-yellow-200">
+                        <div class="flex items-center">
+                            <div class="disease-indicator w-3 h-3 bg-red-500 rounded-full mr-3"></div>
+                            <span class="text-gray-700 font-medium">Leaf Blight</span>
+                        </div>
+                        <i class="fas fa-info-circle text-gray-400 text-sm"></i>
+                    </div>
+                    
+                    <div class="flex items-center justify-between p-3 bg-white rounded-xl border border-yellow-200">
+                        <div class="flex items-center">
+                            <div class="disease-indicator w-3 h-3 bg-secondary rounded-full mr-3"></div>
+                            <span class="text-gray-700 font-medium">Healthy</span>
+                        </div>
+                        <i class="fas fa-check-circle text-secondary text-sm"></i>
+                    </div>
+                </div>
+                
+                <div class="mt-6 text-center">
+                    <span class="px-4 py-2 bg-yellow-200 text-yellow-800 rounded-full text-sm font-semibold">
+                        4 Classifications
+                    </span>
+                </div>
+            </div>
             
-            const files = e.dataTransfer.files;
-            if (files.length > 0) {
-                fileInput.files = files;
-                fileInput.dispatchEvent(new Event('change'));
-            }
-        });
+            <!-- Potato Classification -->
+            <div class="classification-card bg-gradient-to-br from-orange-50 to-red-50 rounded-3xl p-8 border border-orange-100 hover-lift">
+                <div class="flex items-center mb-6">
+                    <div class="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center mr-4 crop-icon">
+                        <i class="fas fa-seedling text-orange-600 text-2xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-dark">Potato</h3>
+                        <p class="text-gray-600 text-sm">Solanum tuberosum</p>
+                    </div>
+                </div>
+                
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between p-3 bg-white rounded-xl border border-orange-200">
+                        <div class="flex items-center">
+                            <div class="disease-indicator w-3 h-3 bg-red-500 rounded-full mr-3"></div>
+                            <span class="text-gray-700 font-medium">Early Blight</span>
+                        </div>
+                        <i class="fas fa-info-circle text-gray-400 text-sm"></i>
+                    </div>
+                    
+                    <div class="flex items-center justify-between p-3 bg-white rounded-xl border border-orange-200">
+                        <div class="flex items-center">
+                            <div class="disease-indicator w-3 h-3 bg-red-500 rounded-full mr-3"></div>
+                            <span class="text-gray-700 font-medium">Late Blight</span>
+                        </div>
+                        <i class="fas fa-info-circle text-gray-400 text-sm"></i>
+                    </div>
+                    
+                    <div class="flex items-center justify-between p-3 bg-white rounded-xl border border-orange-200">
+                        <div class="flex items-center">
+                            <div class="disease-indicator w-3 h-3 bg-secondary rounded-full mr-3"></div>
+                            <span class="text-gray-700 font-medium">Healthy</span>
+                        </div>
+                        <i class="fas fa-check-circle text-secondary text-sm"></i>
+                    </div>
+                </div>
+                
+                <div class="mt-6 text-center">
+                    <span class="px-4 py-2 bg-orange-200 text-orange-800 rounded-full text-sm font-semibold">
+                        3 Classifications
+                    </span>
+                </div>
+            </div>
+            
+            <!-- Rice Classification -->
+            <div class="classification-card bg-gradient-to-br from-green-50 to-emerald-50 rounded-3xl p-8 border border-green-100 hover-lift">
+                <div class="flex items-center mb-6">
+                    <div class="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mr-4 crop-icon">
+                        <i class="fas fa-spa text-green-600 text-2xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-dark">Rice</h3>
+                        <p class="text-gray-600 text-sm">Oryza sativa</p>
+                    </div>
+                </div>
+                
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between p-3 bg-white rounded-xl border border-green-200">
+                        <div class="flex items-center">
+                            <div class="disease-indicator w-3 h-3 bg-red-500 rounded-full mr-3"></div>
+                            <span class="text-gray-700 font-medium">Brown Spot</span>
+                        </div>
+                        <i class="fas fa-info-circle text-gray-400 text-sm"></i>
+                    </div>
+                    
+                    <div class="flex items-center justify-between p-3 bg-white rounded-xl border border-green-200">
+                        <div class="flex items-center">
+                            <div class="disease-indicator w-3 h-3 bg-red-500 rounded-full mr-3"></div>
+                            <span class="text-gray-700 font-medium">Hispa</span>
+                        </div>
+                        <i class="fas fa-info-circle text-gray-400 text-sm"></i>
+                    </div>
+                    
+                    <div class="flex items-center justify-between p-3 bg-white rounded-xl border border-green-200">
+                        <div class="flex items-center">
+                            <div class="disease-indicator w-3 h-3 bg-red-500 rounded-full mr-3"></div>
+                            <span class="text-gray-700 font-medium">Leaf Blast</span>
+                        </div>
+                        <i class="fas fa-info-circle text-gray-400 text-sm"></i>
+                    </div>
+                    
+                    <div class="flex items-center justify-between p-3 bg-white rounded-xl border border-green-200">
+                        <div class="flex items-center">
+                            <div class="disease-indicator w-3 h-3 bg-secondary rounded-full mr-3"></div>
+                            <span class="text-gray-700 font-medium">Healthy</span>
+                        </div>
+                        <i class="fas fa-check-circle text-secondary text-sm"></i>
+                    </div>
+                </div>
+                
+                <div class="mt-6 text-center">
+                    <span class="px-4 py-2 bg-green-200 text-green-800 rounded-full text-sm font-semibold">
+                        4 Classifications
+                    </span>
+                </div>
+            </div>
+            
+            <!-- Wheat Classification -->
+            <div class="classification-card bg-gradient-to-br from-blue-50 to-indigo-50 rounded-3xl p-8 border border-blue-100 hover-lift">
+                <div class="flex items-center mb-6">
+                    <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mr-4 crop-icon">
+                        <i class="fas fa-wheat-awn text-blue-600 text-2xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-dark">Wheat</h3>
+                        <p class="text-gray-600 text-sm">Triticum aestivum</p>
+                    </div>
+                </div>
+                
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between p-3 bg-white rounded-xl border border-blue-200">
+                        <div class="flex items-center">
+                            <div class="disease-indicator w-3 h-3 bg-red-500 rounded-full mr-3"></div>
+                            <span class="text-gray-700 font-medium">Brown Rust</span>
+                        </div>
+                        <i class="fas fa-info-circle text-gray-400 text-sm"></i>
+                    </div>
+                    
+                    <div class="flex items-center justify-between p-3 bg-white rounded-xl border border-blue-200">
+                        <div class="flex items-center">
+                            <div class="disease-indicator w-3 h-3 bg-red-500 rounded-full mr-3"></div>
+                            <span class="text-gray-700 font-medium">Yellow Rust</span>
+                        </div>
+                        <i class="fas fa-info-circle text-gray-400 text-sm"></i>
+                    </div>
+                    
+                    <div class="flex items-center justify-between p-3 bg-white rounded-xl border border-blue-200">
+                        <div class="flex items-center">
+                            <div class="disease-indicator w-3 h-3 bg-secondary rounded-full mr-3"></div>
+                            <span class="text-gray-700 font-medium">Healthy</span>
+                        </div>
+                        <i class="fas fa-check-circle text-secondary text-sm"></i>
+                    </div>
+                </div>
+                
+                <div class="mt-6 text-center">
+                    <span class="px-4 py-2 bg-blue-200 text-blue-800 rounded-full text-sm font-semibold">
+                        3 Classifications
+                    </span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Classification Summary -->
+        <div class="mt-16 bg-gradient-to-r from-primary to-secondary rounded-3xl p-8 text-white text-center">
+            <h3 class="text-2xl font-bold mb-4">Complete Disease Detection Coverage</h3>
+            <p class="text-lg text-blue-100 mb-6">
+                Our AI models can detect and classify diseases across all major crop types with high accuracy
+            </p>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div>
+                    <div class="text-3xl font-bold text-yellow-300">4</div>
+                    <div class="text-blue-100">Corn Classes</div>
+                </div>
+                <div>
+                    <div class="text-3xl font-bold text-orange-300">3</div>
+                    <div class="text-blue-100">Potato Classes</div>
+                </div>
+                <div>
+                    <div class="text-3xl font-bold text-green-300">4</div>
+                    <div class="text-blue-100">Rice Classes</div>
+                </div>
+                <div>
+                    <div class="text-3xl font-bold text-blue-300">3</div>
+                    <div class="text-blue-100">Wheat Classes</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-        // Smooth scrolling for navigation
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
+<!-- Upload Section -->
+<section id="upload" class="py-20 bg-gray-50">
+    <div class="max-w-4xl mx-auto px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl lg:text-5xl font-bold text-dark mb-6">
+                Upload & <span class="text-gradient">Analyze</span>
+            </h2>
+            <p class="text-xl text-gray-600 mb-4">
+                Upload a crop leaf image for instant AI-powered disease detection
+            </p>
+            <p class="text-gray-500">
+                Supports JPG, PNG, WebP formats • Maximum file size: 10MB • Best results with clear, well-lit images
+            </p>
+        </div>
+        
+        <div class="bg-white rounded-3xl shadow-xl border border-gray-100 p-8 lg:p-12">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <div class="upload-zone rounded-3xl p-12 text-center mb-8">
+                    <div class="mb-8">
+                        <div class="w-20 h-20 gradient-primary rounded-2xl flex items-center justify-center mx-auto mb-6">
+                            <i class="fas fa-cloud-upload-alt text-white text-3xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-dark mb-3">Drop your image here</h3>
+                        <p class="text-gray-500 mb-4">or click to select from device</p>
+                        <div class="flex justify-center space-x-4 text-sm text-gray-400">
+                            <span class="flex items-center"><i class="fas fa-check mr-1 text-secondary"></i>High Resolution</span>
+                            <span class="flex items-center"><i class="fas fa-check mr-1 text-secondary"></i>Clear Focus</span>
+                            <span class="flex items-center"><i class="fas fa-check mr-1 text-secondary"></i>Good Lighting</span>
+                        </div>
+                    </div>
+                    
+                    <input type="file" name="image" accept="image/*" required class="hidden" id="fileInput">
+                    <label for="fileInput" 
+                           class="gradient-primary text-white px-8 py-4 rounded-full font-semibold hover:shadow-lg transition-all duration-300 cursor-pointer inline-block">
+                        <i class="fas fa-image mr-3"></i>
+                        Select Image
+                    </label>
+                    
+                    <div id="preview" class="mt-8 hidden">
+                        <div class="relative inline-block">
+                            <img id="previewImage" class="max-w-sm mx-auto rounded-2xl shadow-lg">
+                            <button type="button" onclick="clearPreview()" 
+                                    class="absolute -top-2 -right-2 w-8 h-8 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors">
+                                <i class="fas fa-times text-sm"></i>
+                            </button>
+                        </div>
+                        <p id="fileName" class="mt-4 text-gray-600 font-medium"></p>
+                        <p id="fileSize" class="text-gray-500 text-sm"></p>
+                    </div>
+                </div>
+                
+                <div class="text-center">
+                    <button type="submit" id="analyzeBtn"
+                            class="gradient-secondary text-white px-12 py-4 rounded-full text-xl font-semibold hover:shadow-xl transition-all duration-300 inline-flex items-center disabled:opacity-50 disabled:cursor-not-allowed">
+                        <i class="fas fa-microscope mr-3"></i>
+                        <span id="btnText">Analyze Crop</span>
+                        <i class="fas fa-spinner fa-spin ml-3 hidden" id="loadingSpinner"></i>
+                    </button>
+                    <p class="text-gray-500 text-sm mt-4">
+                        Analysis typically takes 2-5 seconds
+                    </p>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Upload Tips -->
+        <div class="mt-12 grid md:grid-cols-3 gap-6">
+            <div class="bg-white rounded-2xl p-6 border border-gray-100 text-center">
+                <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-camera text-green-600"></i>
+                </div>
+                <h4 class="font-semibold text-dark mb-2">Good Photo Quality</h4>
+                <p class="text-gray-600 text-sm">Use clear, well-lit images with the leaf filling most of the frame</p>
+            </div>
+            
+            <div class="bg-white rounded-2xl p-6 border border-gray-100 text-center">
+                <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-leaf text-blue-600"></i>
+                </div>
+                <h4 class="font-semibold text-dark mb-2">Focus on Symptoms</h4>
+                <p class="text-gray-600 text-sm">Capture affected areas clearly with minimal background distractions</p>
+            </div>
+            
+            <div class="bg-white rounded-2xl p-6 border border-gray-100 text-center">
+                <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-sun text-purple-600"></i>
+                </div>
+                <h4 class="font-semibold text-dark mb-2">Natural Lighting</h4>
+                <p class="text-gray-600 text-sm">Avoid flash photography; natural daylight produces best results</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<!-- Sample Images Section -->
+<section class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl lg:text-5xl font-bold text-dark mb-6">
+                Sample <span class="text-gradient">Gallery</span>
+            </h2>
+            <p class="text-xl text-gray-600">
+                Examples of crop diseases our AI can detect and analyze
+            </p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="card-hover rounded-2xl overflow-hidden shadow-lg hover-lift border border-gray-100 group">
+                <div class="relative">
+                    <img src="{% static 'images/Gallery1.jpg' %}" alt="Crop Sample 1" 
+                         class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                         onerror="this.src='https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=400&h=300&fit=crop&crop=center';">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div class="absolute bottom-4 left-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <span class="px-3 py-1 bg-red-500 rounded-full text-sm font-medium">Disease Detected</span>
+                    </div>
+                </div>
+                <div class="p-6 bg-white">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Corn Leaf Disease</h3>
+                    <p class="text-gray-600 mb-4">Common rust detection example</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-primary font-medium">95% Confidence</span>
+                        <i class="fas fa-arrow-right text-gray-400 group-hover:text-primary transition-colors"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card-hover rounded-2xl overflow-hidden shadow-lg hover-lift border border-gray-100 group">
+                <div class="relative">
+                    <img src="{% static 'images/Gallery2.jpg' %}" alt="Crop Sample 2" 
+                         class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                         onerror="this.src='https://images.unsplash.com/photo-1560493676-04071c5f467b?w=400&h=300&fit=crop&crop=center';">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div class="absolute bottom-4 left-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <span class="px-3 py-1 bg-red-500 rounded-full text-sm font-medium">Disease Detected</span>
+                    </div>
+                </div>
+                <div class="p-6 bg-white">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Potato Blight</h3>
+                    <p class="text-gray-600 mb-4">Early blight identification</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-primary font-medium">92% Confidence</span>
+                        <i class="fas fa-arrow-right text-gray-400 group-hover:text-primary transition-colors"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card-hover rounded-2xl overflow-hidden shadow-lg hover-lift border border-gray-100 group">
+                <div class="relative">
+                    <img src="{% static 'images/Gallery3.jpg' %}" alt="Crop Sample 3" 
+                         class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                         onerror="this.src='https://images.unsplash.com/photo-1586771107445-d3ca888129ff?w=400&h=300&fit=crop&crop=center';">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div class="absolute bottom-4 left-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <span class="px-3 py-1 bg-red-500 rounded-full text-sm font-medium">Disease Detected</span>
+                    </div>
+                </div>
+                <div class="p-6 bg-white">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Rice Disease</h3>
+                    <p class="text-gray-600 mb-4">Leaf blast analysis</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-primary font-medium">89% Confidence</span>
+                        <i class="fas fa-arrow-right text-gray-400 group-hover:text-primary transition-colors"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card-hover rounded-2xl overflow-hidden shadow-lg hover-lift border border-gray-100 group">
+                <div class="relative">
+                    <img src="{% static 'images/Gallery4.jpg' %}" alt="Crop Sample 4" 
+                         class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                         onerror="this.src='https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=400&h=300&fit=crop&crop=center';">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div class="absolute bottom-4 left-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <span class="px-3 py-1 bg-red-500 rounded-full text-sm font-medium">Disease Detected</span>
+                    </div>
+                </div>
+                <div class="p-6 bg-white">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Wheat Rust</h3>
+                    <p class="text-gray-600 mb-4">Yellow rust detection</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-primary font-medium">94% Confidence</span>
+                        <i class="fas fa-arrow-right text-gray-400 group-hover:text-primary transition-colors"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card-hover rounded-2xl overflow-hidden shadow-lg hover-lift border border-gray-100 group">
+                <div class="relative">
+                    <img src="{% static 'images/Gallery5.jpeg' %}" alt="Crop Sample 5" 
+                         class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                         onerror="this.src='https://images.unsplash.com/photo-1592504002751-8ec8577e8e28?w=400&h=300&fit=crop&crop=center';">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div class="absolute bottom-4 left-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <span class="px-3 py-1 bg-secondary rounded-full text-sm font-medium">Healthy Detected</span>
+                    </div>
+                </div>
+                <div class="p-6 bg-white">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Healthy Crops</h3>
+                    <p class="text-gray-600 mb-4">Normal leaf patterns</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-secondary font-medium">98% Confidence</span>
+                        <i class="fas fa-arrow-right text-gray-400 group-hover:text-secondary transition-colors"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card-hover rounded-2xl overflow-hidden shadow-lg hover-lift border border-gray-100 group">
+                <div class="relative">
+                    <img src="{% static 'images/Gallery6.jpg' %}" alt="Crop Sample 6" 
+                         class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                         onerror="this.src='https://images.unsplash.com/photo-1586771107445-d3ca888129ff?w=400&h=300&fit=crop&crop=center';">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div class="absolute bottom-4 left-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <span class="px-3 py-1 bg-red-500 rounded-full text-sm font-medium">Disease Detected</span>
+                    </div>
+                </div>
+                <div class="p-6 bg-white">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Disease Analysis</h3>
+                    <p class="text-gray-600 mb-4">Advanced pattern recognition</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-primary font-medium">91% Confidence</span>
+                        <i class="fas fa-arrow-right text-gray-400 group-hover:text-primary transition-colors"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="text-center mt-12">
+            <button onclick="document.getElementById('upload').scrollIntoView({behavior: 'smooth'})" 
+                    class="gradient-primary text-white px-8 py-4 rounded-full font-semibold hover:shadow-lg transition-all duration-300 inline-flex items-center">
+                <i class="fas fa-upload mr-3"></i>
+                Try with Crop Image
+            </button>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+
+
+
+
+{% block extra_js %}
+// File upload handling
+const fileInput = document.getElementById('fileInput');
+const preview = document.getElementById('preview');
+const previewImage = document.getElementById('previewImage');
+const fileName = document.getElementById('fileName');
+const fileSize = document.getElementById('fileSize');
+const uploadZone = document.querySelector('.upload-zone');
+const analyzeBtn = document.getElementById('analyzeBtn');
+const btnText = document.getElementById('btnText');
+const loadingSpinner = document.getElementById('loadingSpinner');
+
+// File size formatter
+function formatFileSize(bytes) {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+}
+
+// Clear preview function
+function clearPreview() {
+    preview.classList.add('hidden');
+    fileInput.value = '';
+    uploadZone.style.border = '';
+    uploadZone.style.backgroundColor = '';
+}
+
+// File input change handler
+fileInput.addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        if (!file.type.startsWith('image/')) {
+            alert('Please select a valid image file.');
+            return;
+        }
+        
+        if (file.size > 10 * 1024 * 1024) {
+            alert('File size must be less than 10MB.');
+            return;
+        }
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            previewImage.src = e.target.result;
+            fileName.textContent = file.name;
+            fileSize.textContent = formatFileSize(file.size);
+            preview.classList.remove('hidden');
+            
+            uploadZone.style.border = '2px solid #10b981';
+            uploadZone.style.backgroundColor = 'rgba(16, 185, 129, 0.05)';
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+// Drag and drop functionality
+uploadZone.addEventListener('dragover', function(e) {
+    e.preventDefault();
+    uploadZone.classList.add('dragover');
+});
+
+uploadZone.addEventListener('dragleave', function(e) {
+    e.preventDefault();
+    uploadZone.classList.remove('dragover');
+});
+
+uploadZone.addEventListener('drop', function(e) {
+    e.preventDefault();
+    uploadZone.classList.remove('dragover');
+    
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+        const file = files[0];
+        
+        if (!file.type.startsWith('image/')) {
+            alert('Please drop a valid image file.');
+            return;
+        }
+        
+        if (file.size > 10 * 1024 * 1024) {
+            alert('File size must be less than 10MB.');
+            return;
+        }
+        
+        fileInput.files = files;
+        fileInput.dispatchEvent(new Event('change'));
+    }
+});
+
+// Form submission with loading state
+document.querySelector('form').addEventListener('submit', function(e) {
+    analyzeBtn.disabled = true;
+    btnText.textContent = 'Analyzing...';
+    loadingSpinner.classList.remove('hidden');
+});
+
+// Simple smooth scrolling
+function smoothScrollTo(elementId) {
+    const element = document.getElementById(elementId);
+    if (element) {
+        const navHeight = 64;
+        const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+        const offsetPosition = elementPosition - navHeight;
+        
+        window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
         });
-    </script>
-</body>
-</html>
+    }
+}
+
+// Update scroll buttons
+document.querySelectorAll('button[onclick*="scrollIntoView"]').forEach(button => {
+    const onclick = button.getAttribute('onclick');
+    const match = onclick.match(/getElementById\('([^']+)'\)/);
+    if (match) {
+        const targetId = match[1];
+        button.removeAttribute('onclick');
+        button.addEventListener('click', () => smoothScrollTo(targetId));
+    }
+});
+
+// Simple tooltips for disease indicators
+document.querySelectorAll('.disease-indicator').forEach(indicator => {
+    indicator.addEventListener('mouseenter', function() {
+        const isHealthy = this.classList.contains('bg-secondary');
+        const tooltip = document.createElement('div');
+        tooltip.className = 'absolute z-50 px-3 py-2 text-sm bg-dark text-white rounded-lg shadow-lg pointer-events-none';
+        tooltip.textContent = isHealthy ? 'Healthy crop indicator' : 'Disease detected indicator';
+        tooltip.style.top = '-40px';
+        tooltip.style.left = '50%';
+        tooltip.style.transform = 'translateX(-50%)';
+        this.style.position = 'relative';
+        this.appendChild(tooltip);
+        
+        setTimeout(() => {
+            if (tooltip.parentNode) {
+                tooltip.parentNode.removeChild(tooltip);
+            }
+        }, 2000);
+    });
+});
+{% endblock %}
 

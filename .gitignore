@@ -72,3 +72,7 @@ $RECYCLE.BIN/
 
 # Linux
 *~
+
+# Model
+model/model_DenseNet121.h5
+model/model_MobileNetV2.h5
