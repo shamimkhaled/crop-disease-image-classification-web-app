@@ -1,11 +1,11 @@
 services:
   - type: web
-    name: crop-disease-classifier
+    name: crop-disease-web-app
     env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn crop_disease_web_app.wsgi:application
+    startCommand: gunicorn crop_disease.wsgi:application
     envVars:
       - key: DJANGO_SETTINGS_MODULE
-        value: crop_disease_web_app.settings
+        value: crop_disease.settings
       - key: PYTHON_VERSION
-        value: 3.10
+        value: 3.12.2
