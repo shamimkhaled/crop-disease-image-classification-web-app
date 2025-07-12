@@ -74,5 +74,7 @@ $RECYCLE.BIN/
 *~
 
 # Model
+# Ignore specific model files
 model/model_DenseNet121.h5
 model/model_MobileNetV2.h5
+
